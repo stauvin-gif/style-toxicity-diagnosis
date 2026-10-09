@@ -65,7 +65,9 @@ const scaleCopy = {
   5:['STRONGLY AGREE','That is absolutely me.']
 };
 
-let state={name:'',index:0,answers:Array(20).fill(null)};
+const RESULTS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzZZRCuxWLKpAhSrdDES_Sgi9Hi5acK3FeIDXq466l7fXX75GL4ZN1EWZmuN-xROW_v8g/exec';
+
+let state={name:'',index:0,answers:Array(20).fill(null),submitted:false};
 const app=document.querySelector('#app');
 
 function chrome(content){
@@ -97,6 +99,7 @@ function home(){
 function startTest(){
   state.index=0;
   state.answers=Array(20).fill(null);
+  state.submitted=false;
   nameScreen();
 }
 
@@ -200,7 +203,51 @@ function toxicityInfo(value){
   if(value<=80)return {band:'CHAT ON ALERT',color:'#ff9231',desc:'Screenshots may be required.',treatment:'Put the phone down before screenshots become evidence.'};
   return {band:'FULL CRASHOUT',color:'#ff3148',desc:'Do not engage. Do not quote-reply. Someone please take his phone.',treatment:'DO NOT ENGAGE. Someone please take his phone.'};
 }
+function sheetStatus(value){
+  if(value<=20)return '🟢 Zen';
+  if(value<=40)return '🟢 Normal Human';
+  if(value<=60)return '🟡 Getting Spicy';
+  if(value<=80)return '🟠 Chat on Alert';
+  return '🔴 FULL CRASHOUT';
+}
 
+function submitResult(r,tox,combo){
+  if(state.submitted)return;
+  state.submitted=true;
+
+  const toxicity=r.scores['The Crashout'];
+
+  const payload={
+    name:state.name,
+    answers:[...state.answers],
+    scores:{
+      blinker:r.scores['Blinker'],
+      sweat:r.scores['The Sweat'],
+      unc:r.scores['Unc'],
+      professor:r.scores['The Professor'],
+      contentCreator:r.scores['The Content Creator'],
+      crashout:r.scores['The Crashout']
+    },
+    primary:r.primary,
+    secondary:r.secondary,
+    diagnosis:combo.name,
+    diagnosisText:combo.description,
+    toxicity:toxicity,
+    status:sheetStatus(toxicity),
+    treatment:tox.treatment
+  };
+
+  fetch(RESULTS_ENDPOINT,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(payload),
+    keepalive:true
+  }).catch(err=>{
+    console.warn('STD result capture failed:',err);
+    state.submitted=false;
+  });
+}
 function renderResults(){
   window.scrollTo(0,0);
   const r=calculate();
@@ -266,6 +313,7 @@ function renderResults(){
     </div>
     <div class="disclaimer">Entertainment purposes only. This is a gaming personality quiz, not a medical or psychological diagnosis.</div>
   </main>`);
+  submitResult(r,tox,combo);
 }
 
 async function shareResult(){
