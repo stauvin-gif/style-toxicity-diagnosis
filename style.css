@@ -30,6 +30,8 @@ button{touch-action:manipulation}
 .hero-hotspot{position:absolute;left:27%;top:47.1%;width:46%;height:6.3%;border:0;background:transparent;cursor:pointer;border-radius:8px;z-index:3;color:transparent}
 .hero-hotspot:hover,.hero-hotspot:focus-visible{outline:3px solid rgba(22,220,255,.72);outline-offset:3px;box-shadow:0 0 38px rgba(22,220,255,.8);background:rgba(22,220,255,.03)}
 .hero-hotspot-top{position:absolute;left:35%;top:.5%;width:20%;height:5%;border:0;background:transparent;cursor:pointer;color:transparent;z-index:3}
+.faq-hotspot-top{position:absolute;left:66%;top:.5%;width:9%;height:5%;border:0;background:transparent;cursor:pointer;color:transparent;z-index:3}
+.faq-hotspot-top:hover,.faq-hotspot-top:focus-visible{outline:2px solid rgba(22,220,255,.72);outline-offset:2px;box-shadow:0 0 24px rgba(22,220,255,.55);background:rgba(22,220,255,.03)}
 .landing-caption{position:absolute;bottom:8px;right:12px;font-size:10px;color:rgba(255,255,255,.35);z-index:4}
 
 /* internal app chrome */
