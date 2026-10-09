@@ -90,6 +90,7 @@ function home(){
     <div class="poster-wrap">
       <img src="approved-landing.png" alt="Style Toxicity Diagnosis — Know Your Status" />
       <button class="hero-hotspot-top" aria-label="Take the test" onclick="startTest()">Take the test</button>
+      <button class="faq-hotspot-top" aria-label="Frequently asked questions" onclick="window.location.href='faq.html'">FAQ</button>
       <button class="hero-hotspot" aria-label="Take the test" onclick="startTest()">Take the test</button>
       <div class="landing-caption">Entertainment only. Not a medical or psychological diagnosis.</div>
     </div>
